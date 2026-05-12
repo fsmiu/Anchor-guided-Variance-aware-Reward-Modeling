@@ -1,0 +1,30 @@
+# Run 1: BT model on MultiPref
+run_name: "bt_multipref"
+model_name: "NousResearch/Meta-Llama-3.1-8B-Instruct"
+model_type: "bt"
+dataset_name: "multipref"
+
+# Data
+train_data: "data/multipref_train.json"
+val_data: "data/multipref_heldout.json"
+test_data: "data/multipref_heldout.json"
+
+# Training
+epochs: 2
+per_device_batch_size: 16
+per_device_eval_batch_size: 32
+gradient_accumulation_steps: 1
+learning_rate: 1e-5
+lr_scheduler: "cosine"
+warmup_ratio: 0.05
+weight_decay: 1e-4
+max_length: 2048
+
+# Evaluation
+eval_strategy: "steps"
+eval_steps: 50
+
+# Infrastructure
+deepspeed: "configs/ds_config_zero2.json"
+logging_steps: 50
+report_to: "wandb"

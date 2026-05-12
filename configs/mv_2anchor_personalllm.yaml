@@ -1,0 +1,37 @@
+# MeanVar + 2anchor (two binary thresholds) on PersonalLLM
+run_name: "mv_2anchor_personalllm"
+model_name: "NousResearch/Meta-Llama-3.1-8B-Instruct"
+model_type: "meanvar"
+dataset_name: "personalllm"
+
+# Anchor config
+anchor_method: "2anchor"
+anchor_lambda: 0.1
+anchor_tau1: "auto"  # will use 25th percentile of external RM scores
+anchor_tau2: "auto"  # will use 75th percentile of external RM scores
+anchor_model: "skywork-reward-v2-llama-3.1-8b"
+
+# Data
+train_data: "data/personalllm_train.json"
+val_data: "data/personalllm_heldout.json"
+test_data: "data/personalllm_heldout.json"
+
+# Training
+epochs: 1
+per_device_batch_size: 16
+per_device_eval_batch_size: 32
+gradient_accumulation_steps: 1
+learning_rate: 1e-5
+lr_scheduler: "cosine"
+warmup_ratio: 0.05
+weight_decay: 1e-4
+max_length: 2048
+
+# Evaluation (for lambda tuning — compare eval/accuracy across runs)
+eval_strategy: "steps"
+eval_steps: 50
+
+# Infrastructure
+deepspeed: "configs/ds_config_zero2.json"
+logging_steps: 50
+report_to: "wandb"

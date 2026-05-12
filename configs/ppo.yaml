@@ -1,0 +1,39 @@
+# PPO training config for overoptimization study.
+# CLI flags in src/ppo_train.py override the values here.
+
+# Models
+policy_model:  "unsloth/Llama-3.2-1B-Instruct"
+gold_rm_model: "Skywork/Skywork-Reward-V2-Llama-3.1-8B"
+
+# Sequence lengths
+max_prompt_length: 1536
+max_new_tokens:    512
+
+# PPO
+num_epochs:         1
+rollout_batch_size: 64
+mini_batch_size:    8
+ppo_epochs:         1
+learning_rate:      1e-6   # default; sweep via LEARNING_RATES in scripts/run_ppo_{id,ood}.sh
+lr_scheduler_type:  "cosine"
+warmup_ratio:       0
+kl_coef:            0.02
+clip_range:         0.2
+value_clip_range:   0.2
+gamma:              1.0
+lam:                0.95
+
+# Generation
+train_temperature: 1.0
+train_top_p:       1.0
+eval_temperature:  0.0
+
+# Eval
+eval_every_steps: 30
+eval_batch_size:  32
+
+# Infra
+deepspeed:     "configs/accelerate_config.yaml"
+report_to:     "wandb"
+wandb_project: "distributional-rm-ppo"
+seed:          1
